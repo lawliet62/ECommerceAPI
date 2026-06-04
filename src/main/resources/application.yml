@@ -1,3 +1,7 @@
 spring:
   application:
     name: ECommerceAPI
+
+jwt:
+  secret: your-very-long-secret-key-for-hmac-signing
+  expiration: 3600000
