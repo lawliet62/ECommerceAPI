@@ -3,7 +3,7 @@ package org.example.ecommerceapi.domain.user.service;
 import lombok.RequiredArgsConstructor;
 import org.example.ecommerceapi.common.exception.BusinessException;
 import org.example.ecommerceapi.common.exception.ErrorCode;
-import org.example.ecommerceapi.domain.user.dto.AuthResponse;
+import org.example.ecommerceapi.domain.user.dto.LoginResponse;
 import org.example.ecommerceapi.domain.user.entity.AppUser;
 import org.example.ecommerceapi.domain.user.repository.AppUserRepository;
 import org.example.ecommerceapi.security.JwtTokenProvider;
@@ -30,7 +30,7 @@ public class AuthService {
         userRepository.save(user);
     }
 
-    public AuthResponse login(String email, String password) {
+    public LoginResponse login(String email, String password) {
         AppUser user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new BusinessException(ErrorCode.INVALID_LOGIN));
 
@@ -40,6 +40,6 @@ public class AuthService {
 
         String accessToken = jwtTokenProvider.generateToken(user.getId());
 
-        return new AuthResponse(accessToken);
+        return new LoginResponse(accessToken);
     }
 }

@@ -1,6 +1,6 @@
 package org.example.ecommerceapi.domain.user.dto;
 
-public record AuthResponse(
+public record LoginResponse(
         String accessToken
 ) {
 }

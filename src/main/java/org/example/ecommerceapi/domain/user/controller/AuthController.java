@@ -2,7 +2,7 @@ package org.example.ecommerceapi.domain.user.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.example.ecommerceapi.domain.user.dto.AuthResponse;
+import org.example.ecommerceapi.domain.user.dto.LoginResponse;
 import org.example.ecommerceapi.domain.user.dto.LoginRequest;
 import org.example.ecommerceapi.domain.user.dto.RegisterRequest;
 import org.example.ecommerceapi.domain.user.service.AuthService;
@@ -29,10 +29,10 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<AuthResponse> login(
+    public ResponseEntity<LoginResponse> login(
             @Valid @RequestBody LoginRequest request
     ) {
-        AuthResponse response = authService.login(request.email(), request.password());
+        LoginResponse response = authService.login(request.email(), request.password());
 
         return ResponseEntity.ok(response);
     }
