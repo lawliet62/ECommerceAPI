@@ -39,7 +39,7 @@ public class Product {
         this.active = true;
     }
 
-    public static Product createProduct(String name, BigDecimal price, int stock) {
+    public static Product create(String name, BigDecimal price, int stock) {
         return new Product(name, price, stock);
     }
 
