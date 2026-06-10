@@ -16,7 +16,7 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 100)
     private String name;
 
     @Column(nullable = false, precision = 15, scale = 2)
@@ -50,6 +50,7 @@ public class Product {
         this.name = name;
         this.price = price;
     }
+
     public void updateStock(int stock) {
         validateStock(stock);
 
@@ -67,6 +68,10 @@ public class Product {
     private static void validateName(String name) {
         if (name == null || name.isBlank()) {
             throw new IllegalArgumentException("Product name is required");
+        }
+
+        if (name.length() > 100) {
+            throw new IllegalArgumentException("Product name must be 100 characters or less");
         }
     }
 
