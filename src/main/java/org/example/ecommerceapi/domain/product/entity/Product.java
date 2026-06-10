@@ -43,6 +43,27 @@ public class Product {
         return new Product(name, price, stock);
     }
 
+    public void updateInfo(String name, BigDecimal price) {
+        validateName(name);
+        validatePrice(price);
+
+        this.name = name;
+        this.price = price;
+    }
+    public void updateStock(int stock) {
+        validateStock(stock);
+
+        this.stock = stock;
+    }
+
+    public void activate() {
+        this.active = true;
+    }
+
+    public void deactivate() {
+        this.active = false;
+    }
+
     private static void validateName(String name) {
         if (name == null || name.isBlank()) {
             throw new IllegalArgumentException("Product name is required");
