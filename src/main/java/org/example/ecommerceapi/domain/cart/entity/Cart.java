@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
 import org.example.ecommerceapi.domain.user.entity.AppUser;
 
 @Getter
@@ -19,11 +20,7 @@ public class Cart {
     @JoinColumn(name = "user_id", nullable = false, unique = true)
     private AppUser user;
 
-    private Cart(AppUser user) {
-        if (user == null) {
-            throw new IllegalArgumentException("User is required");
-        }
-
+    private Cart(@NonNull AppUser user) {
         this.user = user;
     }
 
