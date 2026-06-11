@@ -1,10 +1,13 @@
 package org.example.ecommerceapi.domain.cart.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import org.example.ecommerceapi.domain.user.entity.AppUser;
 
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 public class Cart {
 
@@ -12,6 +15,20 @@ public class Cart {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    protected Cart() {
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false, unique = true)
+    private AppUser user;
+
+    private Cart(AppUser user) {
+        if (user == null) {
+            throw new IllegalArgumentException("User is required");
+        }
+
+        this.user = user;
     }
+
+    public static Cart create(AppUser user) {
+        return new Cart(user);
+    }
+
 }
