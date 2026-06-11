@@ -53,18 +53,6 @@ public class CartService {
                 .orElseThrow(() -> new BusinessException(ErrorCode.PRODUCT_NOT_FOUND));
     }
 
-    public CartResponse getCart(Long userId) {
-        return cartRepository.findByUserId(userId)
-                .map(cart -> {
-                    List<CartItemResponse> items = cartItemRepository.findAllByCart(cart).stream()
-                            .map(CartItemResponse::from)
-                            .toList();
-
-                    return CartResponse.of(cart.getId(), items);
-                })
-                .orElseGet(CartResponse::empty);
-    }
-
     @Transactional
     public CartItemResponse addItem(Long userId, Long productId, int quantity) {
         AppUser user = getUser(userId);
@@ -76,6 +64,18 @@ public class CartService {
                 .orElseGet(() -> cartItemRepository.save(CartItem.create(cart, product, quantity)));
 
         return CartItemResponse.from(cartItem);
+    }
+
+    public CartResponse getCart(Long userId) {
+        return cartRepository.findByUserId(userId)
+                .map(cart -> {
+                    List<CartItemResponse> items = cartItemRepository.findAllByCart(cart).stream()
+                            .map(CartItemResponse::from)
+                            .toList();
+
+                    return CartResponse.of(cart.getId(), items);
+                })
+                .orElseGet(CartResponse::empty);
     }
 
     @Transactional
