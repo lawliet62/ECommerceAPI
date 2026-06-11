@@ -26,6 +26,10 @@ public class AppUser {
     private Role role;
 
     private AppUser(String email, String password, Role role) {
+        validateEmail(email);
+        validatePassword(password);
+        validateRole(role);
+
         this.email = email;
         this.password = password;
         this.role = role;
@@ -33,6 +37,24 @@ public class AppUser {
 
     public static AppUser createUser(String email, String encodedPassword) {
         return new AppUser(email, encodedPassword, Role.USER);
+    }
+
+    private static void validateEmail(String email) {
+        if (email == null || email.isBlank()) {
+            throw new IllegalArgumentException("Email is required");
+        }
+    }
+
+    private static void validatePassword(String password) {
+        if (password == null || password.isBlank()) {
+            throw new IllegalArgumentException("Password is required");
+        }
+    }
+
+    private static void validateRole(Role role) {
+        if (role == null) {
+            throw new IllegalArgumentException("Role is required");
+        }
     }
 
 }
