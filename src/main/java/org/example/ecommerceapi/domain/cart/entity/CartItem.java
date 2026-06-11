@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
 import org.example.ecommerceapi.domain.product.entity.Product;
 
 @Getter
@@ -34,8 +35,6 @@ public class CartItem {
     private int quantity;
 
     public CartItem(Cart cart, Product product, int quantity) {
-        validateCart(cart);
-        validateProduct(product);
         validateQuantity(quantity);
 
         this.cart = cart;
@@ -43,20 +42,8 @@ public class CartItem {
         this.quantity = quantity;
     }
 
-    public static CartItem create(Cart cart, Product product, int quantity) {
+    public static CartItem create(@NonNull Cart cart, @NonNull Product product, int quantity) {
         return new CartItem(cart, product, quantity);
-    }
-
-    private static void validateCart(Cart cart) {
-        if (cart == null) {
-            throw new IllegalArgumentException("Cart is required");
-        }
-    }
-
-    private static void validateProduct(Product product) {
-        if (product == null) {
-            throw new IllegalArgumentException("Product is required");
-        }
     }
 
     private static void validateQuantity(int quantity) {
