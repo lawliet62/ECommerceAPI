@@ -46,6 +46,19 @@ public class CartItem {
         return new CartItem(cart, product, quantity);
     }
 
+    public CartItem increaseQuantity(int amount) {
+        validateIncreaseAmount(amount);
+        validateQuantity(this.quantity + amount);
+
+        this.quantity += amount;
+        return this;
+    }
+
+    public void updateQuantity(int quantity) {
+        validateQuantity(quantity);
+        this.quantity = quantity;
+    }
+
     private static void validateQuantity(int quantity) {
         if (quantity <= 0) {
             throw new IllegalArgumentException("quantity must be positive");
@@ -53,6 +66,12 @@ public class CartItem {
 
         if (quantity > MAX_QUANTITY) {
             throw new IllegalArgumentException("Quantity must be 99 or less");
+        }
+    }
+
+    private static void validateIncreaseAmount(int amount) {
+        if (amount <= 0) {
+            throw new IllegalArgumentException("Increase amount must be positive");
         }
     }
 
