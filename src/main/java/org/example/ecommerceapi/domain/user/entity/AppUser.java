@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
 
 @Getter
 @Entity
@@ -25,10 +26,9 @@ public class AppUser {
     @Column(nullable = false)
     private Role role;
 
-    private AppUser(String email, String password, Role role) {
+    private AppUser(String email, String password, @NonNull Role role) {
         validateEmail(email);
         validatePassword(password);
-        validateRole(role);
 
         this.email = email;
         this.password = password;
@@ -48,12 +48,6 @@ public class AppUser {
     private static void validatePassword(String password) {
         if (password == null || password.isBlank()) {
             throw new IllegalArgumentException("Password is required");
-        }
-    }
-
-    private static void validateRole(Role role) {
-        if (role == null) {
-            throw new IllegalArgumentException("Role is required");
         }
     }
 
