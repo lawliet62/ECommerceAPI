@@ -4,7 +4,7 @@ import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 
-public record CartItemRequest(
+public record AddItemRequest(
         @NotNull @Positive Long productId,
         @NotNull @Positive @Max(99) Integer quantity
 ) {
