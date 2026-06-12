@@ -43,7 +43,7 @@ public class OrderItem {
         this.quantity = quantity;
     }
 
-    private OrderItem create(Order order, String productNameSnapshot, BigDecimal priceSnapshot, int quantity) {
+    private static OrderItem create(Order order, String productNameSnapshot, BigDecimal priceSnapshot, int quantity) {
         return new OrderItem(order, productNameSnapshot, priceSnapshot, quantity);
     }
 
