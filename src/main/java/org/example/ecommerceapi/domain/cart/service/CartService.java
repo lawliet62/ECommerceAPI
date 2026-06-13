@@ -28,37 +28,6 @@ public class CartService {
     private final ProductRepository productRepository;
     private final CartItemRepository cartItemRepository;
 
-    private Cart getCartOrThrow(AppUser user) {
-        return cartRepository.findByUser(user)
-                .orElseThrow(() -> new BusinessException(ErrorCode.CART_NOT_FOUND));
-    }
-
-    private CartItem getCartItem(Long cartItemId, Cart cart) {
-        return cartItemRepository.findByIdAndCart(cartItemId, cart)
-                .orElseThrow(() -> new BusinessException(ErrorCode.CART_ITEM_NOT_FOUND));
-    }
-
-    private AppUser getUser(Long userId) {
-        return userRepository.findById(userId)
-                .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
-    }
-
-    private Cart getOrCreateCart(AppUser user) {
-        return cartRepository.findByUser(user)
-                .orElseGet(() -> cartRepository.save(Cart.create(user)));
-    }
-
-    private Product getActiveProduct(Long productId) {
-        return productRepository.findByIdAndActiveTrue(productId)
-                .orElseThrow(() -> new BusinessException(ErrorCode.PRODUCT_NOT_FOUND));
-    }
-
-    private void validateStock(Product product, int quantity) {
-        if (product.getStock() < quantity) {
-            throw new BusinessException(ErrorCode.INSUFFICIENT_STOCK);
-        }
-    }
-
     @Transactional
     public CartItemResponse addItem(Long userId, Long productId, int quantity) {
         AppUser user = getUser(userId);
@@ -108,6 +77,37 @@ public class CartService {
         CartItem cartItem = getCartItem(cartItemId, cart);
 
         cartItemRepository.delete(cartItem);
+    }
+
+    private Cart getCartOrThrow(AppUser user) {
+        return cartRepository.findByUser(user)
+                .orElseThrow(() -> new BusinessException(ErrorCode.CART_NOT_FOUND));
+    }
+
+    private CartItem getCartItem(Long cartItemId, Cart cart) {
+        return cartItemRepository.findByIdAndCart(cartItemId, cart)
+                .orElseThrow(() -> new BusinessException(ErrorCode.CART_ITEM_NOT_FOUND));
+    }
+
+    private AppUser getUser(Long userId) {
+        return userRepository.findById(userId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
+    }
+
+    private Cart getOrCreateCart(AppUser user) {
+        return cartRepository.findByUser(user)
+                .orElseGet(() -> cartRepository.save(Cart.create(user)));
+    }
+
+    private Product getActiveProduct(Long productId) {
+        return productRepository.findByIdAndActiveTrue(productId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.PRODUCT_NOT_FOUND));
+    }
+
+    private void validateStock(Product product, int quantity) {
+        if (product.getStock() < quantity) {
+            throw new BusinessException(ErrorCode.INSUFFICIENT_STOCK);
+        }
     }
 
 }
