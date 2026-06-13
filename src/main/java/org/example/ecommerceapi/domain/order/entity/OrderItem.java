@@ -32,6 +32,14 @@ public class OrderItem {
     @Column(nullable = false)
     private int quantity;
 
+    public static OrderItem create(Order order, String productNameSnapshot, BigDecimal priceSnapshot, int quantity) {
+        return new OrderItem(order, productNameSnapshot, priceSnapshot, quantity);
+    }
+
+    public BigDecimal getSubtotal() {
+        return priceSnapshot.multiply(BigDecimal.valueOf(quantity));
+    }
+
     private OrderItem(@NonNull Order order, String productNameSnapshot, BigDecimal priceSnapshot, int quantity) {
         validateProductNameSnapshot(productNameSnapshot);
         validatePriceSnapshot(priceSnapshot);
@@ -41,14 +49,6 @@ public class OrderItem {
         this.productNameSnapshot = productNameSnapshot;
         this.priceSnapshot = priceSnapshot;
         this.quantity = quantity;
-    }
-
-    public static OrderItem create(Order order, String productNameSnapshot, BigDecimal priceSnapshot, int quantity) {
-        return new OrderItem(order, productNameSnapshot, priceSnapshot, quantity);
-    }
-
-    public BigDecimal getSubtotal() {
-        return priceSnapshot.multiply(BigDecimal.valueOf(quantity));
     }
 
     private static void validateProductNameSnapshot(String productNameSnapshot) {
