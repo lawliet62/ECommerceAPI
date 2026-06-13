@@ -3,6 +3,7 @@ package org.example.ecommerceapi.domain.product.controller;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import org.example.ecommerceapi.domain.product.dto.InventoryUpdateRequest;
 import org.example.ecommerceapi.domain.product.dto.ProductCreateRequest;
@@ -38,7 +39,7 @@ public class AdminProductController {
 
     @GetMapping("/{productId}")
     public ResponseEntity<ProductResponse> getProduct(
-            @PathVariable Long productId
+            @PathVariable @Positive Long productId
     ) {
         ProductResponse response = productService.getProductForAdmin(productId);
 
@@ -60,7 +61,8 @@ public class AdminProductController {
 
     @PutMapping("/{productId}")
     public ResponseEntity<ProductResponse> updateProduct(
-            @PathVariable Long productId, @Valid @RequestBody ProductUpdateRequest request
+            @PathVariable @Positive Long productId,
+            @Valid @RequestBody ProductUpdateRequest request
     ) {
         ProductResponse response = productService.updateProduct(
                 productId, request.name(), request.price()
@@ -71,7 +73,8 @@ public class AdminProductController {
 
     @PatchMapping("/{productId}/inventory")
     public ResponseEntity<ProductResponse> updateInventory(
-            @PathVariable Long productId, @Valid @RequestBody InventoryUpdateRequest request
+            @PathVariable @Positive Long productId,
+            @Valid @RequestBody InventoryUpdateRequest request
     ) {
         ProductResponse response = productService.updateInventory(
                 productId, request.stock()
@@ -81,13 +84,17 @@ public class AdminProductController {
     }
 
     @PatchMapping("/{productId}/activate")
-    public ResponseEntity<Void> activateProduct(@PathVariable Long productId) {
+    public ResponseEntity<Void> activateProduct(
+            @PathVariable @Positive Long productId
+    ) {
         productService.activateProduct(productId);
         return ResponseEntity.noContent().build();
     }
 
     @PatchMapping("/{productId}/deactivate")
-    public ResponseEntity<Void> deactivateProduct(@PathVariable Long productId) {
+    public ResponseEntity<Void> deactivateProduct(
+            @PathVariable @Positive Long productId
+    ) {
         productService.deactivateProduct(productId);
         return ResponseEntity.noContent().build();
     }
