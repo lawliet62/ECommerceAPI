@@ -15,10 +15,6 @@ public class JwtTokenProvider {
 
     private final JwtProperties jwtProperties;
 
-    private SecretKey getSigningKey() {
-        return Keys.hmacShaKeyFor(jwtProperties.secret().getBytes(StandardCharsets.UTF_8));
-    }
-
     public String generateToken(Long userId) {
         Date now = new Date();
         Date expiration = new Date(now.getTime() + jwtProperties.expiration());
@@ -40,5 +36,9 @@ public class JwtTokenProvider {
                 .getSubject();
 
         return Long.valueOf(subject);
+    }
+
+    private SecretKey getSigningKey() {
+        return Keys.hmacShaKeyFor(jwtProperties.secret().getBytes(StandardCharsets.UTF_8));
     }
 }
