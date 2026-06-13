@@ -11,4 +11,10 @@ public record OrderResponse(
         BigDecimal totalAmount,
         List<OrderItemResponse> items
 ) {
+    public static OrderResponse of(
+            Long id, OrderStatus status, BigDecimal totalAmount,
+            List<OrderItemResponse> items
+    ) {
+        return new OrderResponse(id, status, totalAmount, items);
+    }
 }
