@@ -47,4 +47,28 @@ public class Order {
             throw new IllegalArgumentException("Total amount must be positive");
         }
     }
+
+    public void markAsPaid() {
+        if (this.status != OrderStatus.CREATED) {
+            throw new IllegalStateException("Only created orders can be paid");
+        }
+
+        this.status = OrderStatus.PAID;
+    }
+
+    public void markAsPaymentFailed() {
+        if (this.status != OrderStatus.CREATED) {
+            throw new IllegalStateException("Only created orders can be marked as payment failed");
+        }
+
+        this.status = OrderStatus.PAYMENT_FAILED;
+    }
+
+    public void cancel() {
+        if (this.status != OrderStatus.CREATED) {
+            throw new IllegalStateException("Only created orders can be cancelled");
+        }
+
+        this.status = OrderStatus.CANCELLED;
+    }
 }
