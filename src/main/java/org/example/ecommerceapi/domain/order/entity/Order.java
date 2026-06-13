@@ -30,22 +30,8 @@ public class Order {
     @Column(nullable = false, precision = 15, scale = 2)
     private BigDecimal totalAmount;
 
-    private Order(@NonNull AppUser user, BigDecimal totalAmount) {
-        validateTotalAmount(totalAmount);
-
-        this.user = user;
-        this.totalAmount = totalAmount;
-        this.status = OrderStatus.CREATED;
-    }
-
     public static Order create(AppUser user, BigDecimal totalAmount) {
         return new Order(user, totalAmount);
-    }
-
-    private static void validateTotalAmount(BigDecimal totalAmount) {
-        if (totalAmount == null || totalAmount.compareTo(BigDecimal.ZERO) <= 0) {
-            throw new IllegalArgumentException("Total amount must be positive");
-        }
     }
 
     public void markAsPaid() {
@@ -70,5 +56,19 @@ public class Order {
         }
 
         this.status = OrderStatus.CANCELLED;
+    }
+
+    private Order(@NonNull AppUser user, BigDecimal totalAmount) {
+        validateTotalAmount(totalAmount);
+
+        this.user = user;
+        this.totalAmount = totalAmount;
+        this.status = OrderStatus.CREATED;
+    }
+
+    private static void validateTotalAmount(BigDecimal totalAmount) {
+        if (totalAmount == null || totalAmount.compareTo(BigDecimal.ZERO) <= 0) {
+            throw new IllegalArgumentException("Total amount must be positive");
+        }
     }
 }
