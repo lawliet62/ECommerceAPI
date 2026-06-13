@@ -28,7 +28,7 @@ public class CartController {
             @Valid @RequestBody AddItemRequest request
     ) {
         CartItemResponse response = cartService.addItem(
-                (Long) authentication.getPrincipal(),
+                getUserId(authentication),
                 request.productId(),
                 request.quantity()
         );
@@ -39,7 +39,7 @@ public class CartController {
     @GetMapping
     public ResponseEntity<CartResponse> getCart(Authentication authentication) {
         CartResponse response = cartService.getCart(
-                (Long) authentication.getPrincipal()
+                getUserId(authentication)
         );
 
         return ResponseEntity.ok(response);
