@@ -28,8 +28,7 @@ public class ProductService {
     }
 
     public ProductResponse getActiveProduct(Long productId) {
-        Product product = productRepository.findByIdAndActiveTrue(productId)
-                .orElseThrow(() -> new BusinessException(ErrorCode.PRODUCT_NOT_FOUND));
+        Product product = getActiveProductEntity(productId);
 
         return ProductResponse.from(product);
     }
@@ -47,8 +46,7 @@ public class ProductService {
     }
 
     public ProductResponse getProductForAdmin(Long productId) {
-        Product product = productRepository.findById(productId)
-                .orElseThrow(() -> new BusinessException(ErrorCode.PRODUCT_NOT_FOUND));
+        Product product = getProductEntity(productId);
 
         return ProductResponse.from(product);
     }
@@ -67,8 +65,7 @@ public class ProductService {
 
     @Transactional
     public ProductResponse updateProduct(Long productId, String name, BigDecimal price) {
-        Product product = productRepository.findById(productId)
-                .orElseThrow(() -> new BusinessException(ErrorCode.PRODUCT_NOT_FOUND));
+        Product product = getProductEntity(productId);
 
         product.updateInfo(name, price);
 
@@ -77,8 +74,7 @@ public class ProductService {
 
     @Transactional
     public ProductResponse updateInventory(Long productId, int stock) {
-        Product product = productRepository.findById(productId)
-                .orElseThrow(() -> new BusinessException(ErrorCode.PRODUCT_NOT_FOUND));
+        Product product = getProductEntity(productId);
 
         product.updateStock(stock);
 
@@ -87,18 +83,26 @@ public class ProductService {
 
     @Transactional
     public void activateProduct(Long productId) {
-        Product product = productRepository.findById(productId)
-                .orElseThrow(() -> new BusinessException(ErrorCode.PRODUCT_NOT_FOUND));
+        Product product = getProductEntity(productId);
 
         product.activate();
     }
 
     @Transactional
     public void deactivateProduct(Long productId) {
-        Product product = productRepository.findById(productId)
-                .orElseThrow(() -> new BusinessException(ErrorCode.PRODUCT_NOT_FOUND));
+        Product product = getProductEntity(productId);
 
         product.deactivate();
+    }
+
+    private Product getActiveProductEntity(Long productId) {
+        return productRepository.findByIdAndActiveTrue(productId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.PRODUCT_NOT_FOUND));
+    }
+
+    private Product getProductEntity(Long productId) {
+        return productRepository.findById(productId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.PRODUCT_NOT_FOUND));
     }
 
 }
