@@ -28,17 +28,6 @@ public class Product {
     @Column(nullable = false)
     private boolean active;
 
-    private Product(String name, BigDecimal price, int stock) {
-        validateName(name);
-        validatePrice(price);
-        validateStock(stock);
-
-        this.name = name;
-        this.price = price;
-        this.stock = stock;
-        this.active = true;
-    }
-
     public static Product create(String name, BigDecimal price, int stock) {
         return new Product(name, price, stock);
     }
@@ -63,6 +52,17 @@ public class Product {
 
     public void deactivate() {
         this.active = false;
+    }
+
+    private Product(String name, BigDecimal price, int stock) {
+        validateName(name);
+        validatePrice(price);
+        validateStock(stock);
+
+        this.name = name;
+        this.price = price;
+        this.stock = stock;
+        this.active = true;
     }
 
     private static void validateName(String name) {
