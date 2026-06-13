@@ -53,6 +53,12 @@ public class CartService {
                 .orElseThrow(() -> new BusinessException(ErrorCode.PRODUCT_NOT_FOUND));
     }
 
+    private void validateStock(Product product, int quantity) {
+        if (product.getStock() < quantity) {
+            throw new BusinessException(ErrorCode.INSUFFICIENT_STOCK);
+        }
+    }
+
     @Transactional
     public CartItemResponse addItem(Long userId, Long productId, int quantity) {
         AppUser user = getUser(userId);
@@ -60,9 +66,14 @@ public class CartService {
         Product product = getActiveProduct(productId);
 
         CartItem cartItem = cartItemRepository.findByCartAndProduct(cart, product)
-                .map(item -> item.increaseQuantity(quantity))
-                .orElseGet(() -> cartItemRepository.save(CartItem.create(cart, product, quantity)));
-
+                .map(item -> {
+                    validateStock(product, item.getQuantity() + quantity);
+                    return item.increaseQuantity(quantity);
+                })
+                .orElseGet(() -> {
+                    validateStock(product, quantity);
+                    return cartItemRepository.save(CartItem.create(cart, product, quantity));
+                });
         return CartItemResponse.from(cartItem);
     }
 
@@ -84,6 +95,7 @@ public class CartService {
         Cart cart = getCartOrThrow(user);
         CartItem cartItem = getCartItem(cartItemId, cart);
 
+        validateStock(cartItem.getProduct(), quantity);
         cartItem.updateQuantity(quantity);
 
         return CartItemResponse.from(cartItem);
