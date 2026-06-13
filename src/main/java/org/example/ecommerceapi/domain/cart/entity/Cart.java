@@ -20,12 +20,12 @@ public class Cart {
     @JoinColumn(name = "user_id", nullable = false, unique = true)
     private AppUser user;
 
-    private Cart(@NonNull AppUser user) {
-        this.user = user;
-    }
-
     public static Cart create(AppUser user) {
         return new Cart(user);
+    }
+
+    private Cart(@NonNull AppUser user) {
+        this.user = user;
     }
 
 }
