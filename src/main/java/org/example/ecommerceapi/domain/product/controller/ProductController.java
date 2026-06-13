@@ -2,6 +2,7 @@ package org.example.ecommerceapi.domain.product.controller;
 
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import org.example.ecommerceapi.domain.product.dto.ProductResponse;
 import org.example.ecommerceapi.domain.product.service.ProductService;
@@ -22,7 +23,7 @@ public class ProductController {
 
     @GetMapping("/{productId}")
     public ResponseEntity<ProductResponse> getActiveProduct(
-            @PathVariable Long productId
+            @PathVariable @Positive Long productId
     ) {
         ProductResponse response = productService.getActiveProduct(productId);
 
