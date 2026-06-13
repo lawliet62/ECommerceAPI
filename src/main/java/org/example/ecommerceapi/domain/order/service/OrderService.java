@@ -36,52 +36,6 @@ public class OrderService {
     private final CartRepository cartRepository;
     private final CartItemRepository cartItemRepository;
 
-    private AppUser getUser(Long userId) {
-        return userRepository.findById(userId)
-                .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
-    }
-
-    private Cart getCart(AppUser user) {
-        return cartRepository.findByUser(user)
-                .orElseThrow(() -> new BusinessException(ErrorCode.CART_NOT_FOUND));
-    }
-
-    private List<CartItem> getCartItems(Cart cart) {
-        List<CartItem> cartItems = cartItemRepository.findAllByCart(cart);
-
-        if (cartItems.isEmpty()) {
-            throw new BusinessException(ErrorCode.EMPTY_CART);
-        }
-
-        return cartItems;
-    }
-
-    private Order getOrder(Long orderId, AppUser user) {
-        return orderRepository.findByIdAndUser(orderId, user)
-                .orElseThrow(() -> new BusinessException(ErrorCode.ORDER_NOT_FOUND));
-    }
-
-    private BigDecimal calculateTotalAmount(List<CartItem> cartItems) {
-        return cartItems.stream()
-                .map(cartItem -> cartItem.getProduct().getPrice()
-                        .multiply(BigDecimal.valueOf(cartItem.getQuantity())))
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
-    }
-
-    private void validateOrderableItems(List<CartItem> cartItems) {
-        for (CartItem cartItem : cartItems) {
-            Product product = cartItem.getProduct();
-
-            if (!product.isActive()) {
-                throw new BusinessException(ErrorCode.PRODUCT_NOT_ORDERABLE);
-            }
-
-            if (product.getStock() < cartItem.getQuantity()) {
-                throw new BusinessException(ErrorCode.INSUFFICIENT_STOCK);
-            }
-        }
-    }
-
     @Transactional
     public OrderResponse createOrder(Long userId) {
         AppUser user = getUser(userId);
@@ -140,6 +94,52 @@ public class OrderService {
 
         return orderRepository.findAllByUser(user, pageable)
                 .map(OrderSummaryResponse::from);
+    }
+
+    private AppUser getUser(Long userId) {
+        return userRepository.findById(userId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
+    }
+
+    private Cart getCart(AppUser user) {
+        return cartRepository.findByUser(user)
+                .orElseThrow(() -> new BusinessException(ErrorCode.CART_NOT_FOUND));
+    }
+
+    private List<CartItem> getCartItems(Cart cart) {
+        List<CartItem> cartItems = cartItemRepository.findAllByCart(cart);
+
+        if (cartItems.isEmpty()) {
+            throw new BusinessException(ErrorCode.EMPTY_CART);
+        }
+
+        return cartItems;
+    }
+
+    private Order getOrder(Long orderId, AppUser user) {
+        return orderRepository.findByIdAndUser(orderId, user)
+                .orElseThrow(() -> new BusinessException(ErrorCode.ORDER_NOT_FOUND));
+    }
+
+    private BigDecimal calculateTotalAmount(List<CartItem> cartItems) {
+        return cartItems.stream()
+                .map(cartItem -> cartItem.getProduct().getPrice()
+                        .multiply(BigDecimal.valueOf(cartItem.getQuantity())))
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
+
+    private void validateOrderableItems(List<CartItem> cartItems) {
+        for (CartItem cartItem : cartItems) {
+            Product product = cartItem.getProduct();
+
+            if (!product.isActive()) {
+                throw new BusinessException(ErrorCode.PRODUCT_NOT_ORDERABLE);
+            }
+
+            if (product.getStock() < cartItem.getQuantity()) {
+                throw new BusinessException(ErrorCode.INSUFFICIENT_STOCK);
+            }
+        }
     }
 
 }
