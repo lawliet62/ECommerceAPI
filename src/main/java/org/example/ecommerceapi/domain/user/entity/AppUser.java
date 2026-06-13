@@ -26,6 +26,10 @@ public class AppUser {
     @Column(nullable = false)
     private Role role;
 
+    public static AppUser createUser(String email, String encodedPassword) {
+        return new AppUser(email, encodedPassword, Role.USER);
+    }
+
     private AppUser(String email, String password, @NonNull Role role) {
         validateEmail(email);
         validatePassword(password);
@@ -33,10 +37,6 @@ public class AppUser {
         this.email = email;
         this.password = password;
         this.role = role;
-    }
-
-    public static AppUser createUser(String email, String encodedPassword) {
-        return new AppUser(email, encodedPassword, Role.USER);
     }
 
     private static void validateEmail(String email) {
