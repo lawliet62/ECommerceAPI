@@ -52,8 +52,7 @@ public class OrderService {
         List<OrderItem> orderItems = cartItems.stream()
                 .map(cartItem -> OrderItem.create(
                         savedOrder,
-                        cartItem.getProduct().getName(),
-                        cartItem.getProduct().getPrice(),
+                        cartItem.getProduct(),
                         cartItem.getQuantity()
                 ))
                 .toList();
