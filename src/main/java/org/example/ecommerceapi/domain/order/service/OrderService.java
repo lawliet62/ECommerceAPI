@@ -39,7 +39,7 @@ public class OrderService {
     @Transactional
     public OrderResponse createOrder(Long userId) {
         AppUser user = getUser(userId);
-        Cart cart = getCart(user);
+        Cart cart = getCart(userId);
         List<CartItem> cartItems = getCartItems(cart);
 
         validateOrderableItems(cartItems);
@@ -73,8 +73,7 @@ public class OrderService {
     }
 
     public OrderResponse findOrder(Long orderId, Long userId) {
-        AppUser user = getUser(userId);
-        Order order = getOrder(orderId, user);
+        Order order = getOrder(orderId, userId);
         List<OrderItem> orderItems = orderItemRepository.findAllByOrder(order);
 
         List<OrderItemResponse> items = orderItems.stream()
@@ -90,9 +89,7 @@ public class OrderService {
     }
 
     public Page<OrderSummaryResponse> findOrders(Long userId, Pageable pageable) {
-        AppUser user = getUser(userId);
-
-        return orderRepository.findAllByUser(user, pageable)
+        return orderRepository.findAllByUserId(userId, pageable)
                 .map(OrderSummaryResponse::from);
     }
 
@@ -101,8 +98,8 @@ public class OrderService {
                 .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
     }
 
-    private Cart getCart(AppUser user) {
-        return cartRepository.findByUser(user)
+    private Cart getCart(Long userId) {
+        return cartRepository.findByUserId(userId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.CART_NOT_FOUND));
     }
 
@@ -116,8 +113,8 @@ public class OrderService {
         return cartItems;
     }
 
-    private Order getOrder(Long orderId, AppUser user) {
-        return orderRepository.findByIdAndUser(orderId, user)
+    private Order getOrder(Long orderId, Long userId) {
+        return orderRepository.findByIdAndUserId(orderId, userId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.ORDER_NOT_FOUND));
     }
 
