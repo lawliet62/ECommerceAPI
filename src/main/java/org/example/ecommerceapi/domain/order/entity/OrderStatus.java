@@ -1,8 +1,7 @@
 package org.example.ecommerceapi.domain.order.entity;
 
 public enum OrderStatus {
-    CREATED,
+    PENDING_PAYMENT,
     PAID,
-    PAYMENT_FAILED,
     CANCELLED
 }
