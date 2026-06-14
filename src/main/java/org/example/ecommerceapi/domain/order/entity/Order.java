@@ -35,24 +35,16 @@ public class Order {
     }
 
     public void markAsPaid() {
-        if (this.status != OrderStatus.CREATED) {
-            throw new IllegalStateException("Only created orders can be paid");
+        if (this.status != OrderStatus.PENDING_PAYMENT) {
+            throw new IllegalStateException("Only pending payment orders can be paid");
         }
 
         this.status = OrderStatus.PAID;
     }
 
-    public void markAsPaymentFailed() {
-        if (this.status != OrderStatus.CREATED) {
-            throw new IllegalStateException("Only created orders can be marked as payment failed");
-        }
-
-        this.status = OrderStatus.PAYMENT_FAILED;
-    }
-
     public void cancel() {
-        if (this.status != OrderStatus.CREATED) {
-            throw new IllegalStateException("Only created orders can be cancelled");
+        if (this.status != OrderStatus.PENDING_PAYMENT) {
+            throw new IllegalStateException("Only pending payment orders can be cancelled");
         }
 
         this.status = OrderStatus.CANCELLED;
@@ -63,7 +55,7 @@ public class Order {
 
         this.user = user;
         this.totalAmount = totalAmount;
-        this.status = OrderStatus.CREATED;
+        this.status = OrderStatus.PENDING_PAYMENT;
     }
 
     private static void validateTotalAmount(BigDecimal totalAmount) {
