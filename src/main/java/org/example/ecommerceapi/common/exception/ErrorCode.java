@@ -16,6 +16,7 @@ public enum ErrorCode {
     CART_ITEM_NOT_FOUND(HttpStatus.NOT_FOUND, "Cart item not found"),
     EMPTY_CART(HttpStatus.NO_CONTENT, "Empty cart"),
     ORDER_NOT_FOUND(HttpStatus.NOT_FOUND, "Order not found"),
+    PAYMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "Payment not found"),
     INSUFFICIENT_STOCK(HttpStatus.CONFLICT, "Insufficient stock"),
     PRODUCT_NOT_ORDERABLE(HttpStatus.CONFLICT, "Product is not orderable");
 
