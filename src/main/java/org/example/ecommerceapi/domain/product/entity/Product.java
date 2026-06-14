@@ -46,6 +46,16 @@ public class Product {
         this.stock = stock;
     }
 
+    public void decreaseStock(int quantity) {
+        validateDecreaseQuantity(quantity);
+
+        if (this.stock < quantity) {
+            throw new IllegalStateException("Insufficient stock");
+        }
+
+        this.stock -= quantity;
+    }
+
     public void activate() {
         this.active = true;
     }
@@ -84,6 +94,12 @@ public class Product {
     private static void validateStock(int stock) {
         if (stock < 0) {
             throw new IllegalArgumentException("Product stock must be zero or positive");
+        }
+    }
+
+    private static void validateDecreaseQuantity(int quantity) {
+        if (quantity <= 0) {
+            throw new IllegalArgumentException("Decrease quantity must be positive");
         }
     }
 }
