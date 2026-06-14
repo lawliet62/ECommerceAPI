@@ -5,6 +5,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
+import org.example.ecommerceapi.domain.product.entity.Product;
 
 import java.math.BigDecimal;
 
@@ -23,6 +24,10 @@ public class OrderItem {
     @JoinColumn(name = "order_id", nullable = false)
     private Order order;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "product_id", nullable = false)
+    private Product product;
+
     @Column(nullable = false, length = 100)
     private String productNameSnapshot;
 
@@ -32,20 +37,30 @@ public class OrderItem {
     @Column(nullable = false)
     private int quantity;
 
-    public static OrderItem create(Order order, String productNameSnapshot, BigDecimal priceSnapshot, int quantity) {
-        return new OrderItem(order, productNameSnapshot, priceSnapshot, quantity);
+    public static OrderItem create(Order order, Product product, int quantity) {
+        return new OrderItem(
+                order,
+                product,
+                product.getName(),
+                product.getPrice(),
+                quantity
+        );
     }
 
     public BigDecimal getSubtotal() {
         return priceSnapshot.multiply(BigDecimal.valueOf(quantity));
     }
 
-    private OrderItem(@NonNull Order order, String productNameSnapshot, BigDecimal priceSnapshot, int quantity) {
+    private OrderItem(
+            @NonNull Order order, @NonNull Product product,
+            String productNameSnapshot, BigDecimal priceSnapshot, int quantity
+    ) {
         validateProductNameSnapshot(productNameSnapshot);
         validatePriceSnapshot(priceSnapshot);
         validateQuantity(quantity);
 
         this.order = order;
+        this.product = product;
         this.productNameSnapshot = productNameSnapshot;
         this.priceSnapshot = priceSnapshot;
         this.quantity = quantity;
