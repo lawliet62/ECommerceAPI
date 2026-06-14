@@ -15,4 +15,6 @@ public interface PaymentRepository extends JpaRepository<Payment, Long> {
     Optional<Payment> findByIdAndOrderUser(Long paymentId, AppUser user);
 
     Optional<Payment> findByOrder(Order order);
+
+    boolean existsByOrder(Order order);
 }
