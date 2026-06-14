@@ -30,8 +30,7 @@ public class CartService {
 
     @Transactional
     public CartItemResponse addItem(Long userId, Long productId, int quantity) {
-        AppUser user = getUser(userId);
-        Cart cart = getOrCreateCart(user);
+        Cart cart = getOrCreateCart(userId);
         Product product = getActiveProduct(productId);
 
         CartItem cartItem = cartItemRepository.findByCartAndProduct(cart, product)
@@ -60,8 +59,7 @@ public class CartService {
 
     @Transactional
     public CartItemResponse updateItem(Long userId, Long cartItemId, int quantity) {
-        AppUser user = getUser(userId);
-        Cart cart = getCartOrThrow(user);
+        Cart cart = getCartOrThrow(userId);
         CartItem cartItem = getCartItem(cartItemId, cart);
 
         validateStock(cartItem.getProduct(), quantity);
@@ -72,15 +70,14 @@ public class CartService {
 
     @Transactional
     public void removeItem(Long userId, Long cartItemId) {
-        AppUser user = getUser(userId);
-        Cart cart = getCartOrThrow(user);
+        Cart cart = getCartOrThrow(userId);
         CartItem cartItem = getCartItem(cartItemId, cart);
 
         cartItemRepository.delete(cartItem);
     }
 
-    private Cart getCartOrThrow(AppUser user) {
-        return cartRepository.findByUser(user)
+    private Cart getCartOrThrow(Long userId) {
+        return cartRepository.findByUserId(userId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.CART_NOT_FOUND));
     }
 
@@ -94,9 +91,12 @@ public class CartService {
                 .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
     }
 
-    private Cart getOrCreateCart(AppUser user) {
-        return cartRepository.findByUser(user)
-                .orElseGet(() -> cartRepository.save(Cart.create(user)));
+    private Cart getOrCreateCart(Long userId) {
+        return cartRepository.findByUserId(userId)
+                .orElseGet(() -> {
+                    AppUser user = getUser(userId);
+                    return cartRepository.save(Cart.create(user));
+                });
     }
 
     private Product getActiveProduct(Long productId) {
