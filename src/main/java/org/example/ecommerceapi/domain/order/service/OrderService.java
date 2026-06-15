@@ -92,6 +92,13 @@ public class OrderService {
                 .map(OrderSummaryResponse::from);
     }
 
+    @Transactional
+    public void cancelOrder(Long orderId, Long userId) {
+        Order order = getOrder(orderId, userId);
+
+        cancel(order);
+    }
+
     private AppUser getUser(Long userId) {
         return userRepository.findById(userId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
@@ -135,6 +142,14 @@ public class OrderService {
             if (product.getStock() < cartItem.getQuantity()) {
                 throw new BusinessException(ErrorCode.INSUFFICIENT_STOCK);
             }
+        }
+    }
+
+    private void cancel(Order order) {
+        try {
+            order.cancel();
+        } catch (IllegalStateException exception) {
+            throw new BusinessException(ErrorCode.ORDER_NOT_CANCELABLE);
         }
     }
 
