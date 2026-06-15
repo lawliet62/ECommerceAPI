@@ -22,7 +22,8 @@ public enum ErrorCode {
     ORDER_NOT_PAYABLE(HttpStatus.CONFLICT, "Order not payable"),
     PAYMENT_ALREADY_EXISTS(HttpStatus.CONFLICT, "Payment already exists"),
     ORDER_NOT_CANCELABLE(HttpStatus.CONFLICT, "Order not cancelable"),
-    PAYMENT_NOT_CANCELABLE(HttpStatus.CONFLICT, "Payment not cancelable");
+    PAYMENT_NOT_CANCELABLE(HttpStatus.CONFLICT, "Payment not cancelable"),
+    PAYMENT_NOT_PROCESSABLE(HttpStatus.CONFLICT, "Payment not processable");
 
     private final HttpStatus status;
     private final String message;
