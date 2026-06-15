@@ -41,6 +41,14 @@ public class Payment {
         this.status = PaymentStatus.SUCCESS;
     }
 
+    public void cancel() {
+        if (this.status != PaymentStatus.PENDING) {
+            throw new IllegalStateException("Only pending payments can be cancelled");
+        }
+
+        this.status = PaymentStatus.CANCELLED;
+    }
+
     public void markAsFailed() {
         if (this.status != PaymentStatus.PENDING) {
             throw new IllegalStateException("Only pending payments can fail");
