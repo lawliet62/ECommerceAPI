@@ -2,6 +2,7 @@ package org.example.ecommerceapi.domain.payment.repository;
 
 import org.example.ecommerceapi.domain.order.entity.Order;
 import org.example.ecommerceapi.domain.payment.entity.Payment;
+import org.example.ecommerceapi.domain.payment.entity.PaymentStatus;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -13,7 +14,7 @@ public interface PaymentRepository extends JpaRepository<Payment, Long> {
 
     Optional<Payment> findByIdAndOrderUserId(Long paymentId, Long userId);
 
-    Optional<Payment> findByOrder(Order order);
+    Page<Payment> findAllByOrder(Order order, Pageable pageable);
 
-    boolean existsByOrder(Order order);
+    boolean existsByOrderAndStatus(Order order, PaymentStatus status);
 }
