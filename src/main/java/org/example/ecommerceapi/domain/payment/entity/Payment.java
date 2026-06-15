@@ -33,7 +33,7 @@ public class Payment {
         return new Payment(order, order.getTotalAmount());
     }
 
-    public void markAsSuccess() {
+    public void complete() {
         if (this.status != PaymentStatus.PENDING) {
             throw new IllegalStateException("Only pending payments can succeed");
         }
@@ -49,7 +49,7 @@ public class Payment {
         this.status = PaymentStatus.CANCELLED;
     }
 
-    public void markAsFailed() {
+    public void fail() {
         if (this.status != PaymentStatus.PENDING) {
             throw new IllegalStateException("Only pending payments can fail");
         }
