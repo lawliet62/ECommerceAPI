@@ -18,9 +18,10 @@ public enum ErrorCode {
     ORDER_NOT_FOUND(HttpStatus.NOT_FOUND, "Order not found"),
     PAYMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "Payment not found"),
     INSUFFICIENT_STOCK(HttpStatus.CONFLICT, "Insufficient stock"),
-    PRODUCT_NOT_ORDERABLE(HttpStatus.CONFLICT, "Product is not orderable"),
+    PRODUCT_NOT_ORDERABLE(HttpStatus.CONFLICT, "Product not orderable"),
     ORDER_NOT_PAYABLE(HttpStatus.CONFLICT, "Order not payable"),
-    PAYMENT_ALREADY_EXISTS(HttpStatus.CONFLICT, "Payment already exists");
+    PAYMENT_ALREADY_EXISTS(HttpStatus.CONFLICT, "Payment already exists"),
+    ORDER_NOT_CANCELABLE(HttpStatus.CONFLICT, "Order not cancelable");
 
     private final HttpStatus status;
     private final String message;
