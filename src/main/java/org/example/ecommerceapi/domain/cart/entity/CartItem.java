@@ -11,6 +11,7 @@ import org.example.ecommerceapi.domain.product.entity.Product;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 @Table(
+        name = "cart_item",
         uniqueConstraints = {
                 @UniqueConstraint(columnNames = {"cart_id", "product_id"})
         }

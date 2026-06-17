@@ -12,6 +12,7 @@ import java.math.BigDecimal;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
+@Table(name = "order_item")
 public class OrderItem {
 
     private static final int MAX_QUANTITY = 99;

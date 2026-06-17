@@ -10,6 +10,7 @@ import org.example.ecommerceapi.domain.user.entity.AppUser;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
+@Table(name = "cart")
 public class Cart {
 
     @Id
