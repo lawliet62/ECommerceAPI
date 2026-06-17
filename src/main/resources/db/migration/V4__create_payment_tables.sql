@@ -4,10 +4,7 @@ CREATE TABLE payment (
     status VARCHAR(255) NOT NULL,
     amount DECIMAL(15, 2) NOT NULL,
     pending_order_id BIGINT GENERATED ALWAYS AS (
-        CASE
-            WHEN status = 'PENDING' THEN order_id
-            ELSE NULL
-        END
+        IF(status = 'PENDING', order_id, NULL)
     ) STORED INVISIBLE,
     PRIMARY KEY (id),
     CONSTRAINT ck_payment_status CHECK (status IN ('PENDING', 'SUCCESS', 'CANCELLED', 'FAILED')),
