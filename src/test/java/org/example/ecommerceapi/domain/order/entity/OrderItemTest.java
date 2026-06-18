@@ -52,7 +52,7 @@ class OrderItemTest {
 
     @Test
     void getSubtotal_returnsPriceSnapshotMultipliedByQuantity() {
-        OrderItem orderItem = createOrderItem(2);
+        OrderItem orderItem = createOrderItem();
 
         assertEquals(BigDecimal.valueOf(20), orderItem.getSubtotal());
     }
@@ -66,7 +66,7 @@ class OrderItemTest {
         return Product.create("Product 1", BigDecimal.valueOf(10), 10);
     }
 
-    private OrderItem createOrderItem(int quantity) {
-        return OrderItem.create(createOrder(), createProduct(), quantity);
+    private OrderItem createOrderItem() {
+        return OrderItem.create(createOrder(), createProduct(), 2);
     }
 }
