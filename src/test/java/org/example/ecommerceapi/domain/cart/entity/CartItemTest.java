@@ -12,9 +12,8 @@ class CartItemTest {
 
     @Test
     void create_withValidValues_createsCartItem() {
-        AppUser user = AppUser.createUser("user@example.com", "encodedPassword");
-        Cart cart = Cart.create(user);
-        Product product = Product.create("Keyboard", BigDecimal.valueOf(30000), 10);
+        Cart cart = createCart();
+        Product product = createProduct();
 
         CartItem cartItem = CartItem.create(cart, product, 10);
 
@@ -25,21 +24,24 @@ class CartItemTest {
 
     @Test
     void create_withZeroOrNegativeQuantity_throwsException() {
-        AppUser user = AppUser.createUser("user@example.com", "encodedPassword");
-        Cart cart = Cart.create(user);
-        Product product = Product.create("Keyboard", BigDecimal.valueOf(30000), 10);
+        Cart cart = createCart();
+        Product product = createProduct();
 
         assertThrows(
                 IllegalArgumentException.class,
                 () -> CartItem.create(cart, product, 0)
         );
+
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> CartItem.create(cart, product, -1)
+        );
     }
 
     @Test
     void create_withQuantityGreaterThan99_throwsException() {
-        AppUser user = AppUser.createUser("user@example.com", "encodedPassword");
-        Cart cart = Cart.create(user);
-        Product product = Product.create("Keyboard", BigDecimal.valueOf(30000), 10);
+        Cart cart = createCart();
+        Product product = createProduct();
 
         assertThrows(
                 IllegalArgumentException.class,
@@ -49,10 +51,7 @@ class CartItemTest {
 
     @Test
     void increaseQuantity_withValidAmount_increasesQuantity() {
-        AppUser user = AppUser.createUser("user@example.com", "encodedPassword");
-        Cart cart = Cart.create(user);
-        Product product = Product.create("Keyboard", BigDecimal.valueOf(30000), 10);
-        CartItem cartItem = CartItem.create(cart, product, 10);
+        CartItem cartItem = createCartItem(10);
 
         cartItem.increaseQuantity(10);
 
@@ -61,23 +60,22 @@ class CartItemTest {
 
     @Test
     void increaseQuantity_withZeroOrNegativeAmount_throwsException() {
-        AppUser user = AppUser.createUser("user@example.com", "encodedPassword");
-        Cart cart = Cart.create(user);
-        Product product = Product.create("Keyboard", BigDecimal.valueOf(30000), 10);
-        CartItem cartItem = CartItem.create(cart, product, 10);
+        CartItem cartItem = createCartItem(10);
 
         assertThrows(
                 IllegalArgumentException.class,
                 () -> cartItem.increaseQuantity(0)
         );
+
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> cartItem.increaseQuantity(-1)
+        );
     }
 
     @Test
     void increaseQuantity_whenResultGreaterThan99_throwsException() {
-        AppUser user = AppUser.createUser("user@example.com", "encodedPassword");
-        Cart cart = Cart.create(user);
-        Product product = Product.create("Keyboard", BigDecimal.valueOf(30000), 10);
-        CartItem cartItem = CartItem.create(cart, product, 90);
+        CartItem cartItem = createCartItem(90);
 
         assertThrows(
                 IllegalArgumentException.class,
@@ -87,10 +85,7 @@ class CartItemTest {
 
     @Test
     void updateQuantity_withValidQuantity_updatesQuantity() {
-        AppUser user = AppUser.createUser("user@example.com", "encodedPassword");
-        Cart cart = Cart.create(user);
-        Product product = Product.create("Keyboard", BigDecimal.valueOf(30000), 10);
-        CartItem cartItem = CartItem.create(cart, product, 10);
+        CartItem cartItem = createCartItem(10);
 
         cartItem.updateQuantity(20);
 
@@ -99,14 +94,34 @@ class CartItemTest {
 
     @Test
     void updateQuantity_withInvalidQuantity_throwsException() {
-        AppUser user = AppUser.createUser("user@example.com", "encodedPassword");
-        Cart cart = Cart.create(user);
-        Product product = Product.create("Keyboard", BigDecimal.valueOf(30000), 10);
-        CartItem cartItem = CartItem.create(cart, product, 10);
+        CartItem cartItem = createCartItem(10);
 
         assertThrows(
                 IllegalArgumentException.class,
                 () -> cartItem.updateQuantity(0)
         );
+
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> cartItem.updateQuantity(-1)
+        );
+
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> cartItem.updateQuantity(100)
+        );
+    }
+
+    private Cart createCart() {
+        AppUser user = AppUser.createUser("user@example.com", "encodedPassword");
+        return Cart.create(user);
+    }
+
+    private Product createProduct() {
+        return Product.create("Keyboard", BigDecimal.valueOf(30000), 10);
+    }
+
+    private CartItem createCartItem(int quantity) {
+        return CartItem.create(createCart(), createProduct(), quantity);
     }
 }
