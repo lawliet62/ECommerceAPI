@@ -35,7 +35,7 @@ public class CartItem {
     @Column(nullable = false)
     private int quantity;
 
-    public static CartItem create(@NonNull Cart cart, @NonNull Product product, int quantity) {
+    public static CartItem create(Cart cart, Product product, int quantity) {
         return new CartItem(cart, product, quantity);
     }
 
@@ -52,7 +52,7 @@ public class CartItem {
         this.quantity = quantity;
     }
 
-    private CartItem(Cart cart, Product product, int quantity) {
+    private CartItem(@NonNull Cart cart, @NonNull Product product, int quantity) {
         validateQuantity(quantity);
 
         this.cart = cart;
