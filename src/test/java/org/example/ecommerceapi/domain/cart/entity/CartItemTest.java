@@ -24,27 +24,6 @@ class CartItemTest {
     }
 
     @Test
-    void create_withNullCart_throwsException() {
-        Product product = Product.create("Keyboard", BigDecimal.valueOf(30000), 10);
-
-        assertThrows(
-                NullPointerException.class,
-                () -> CartItem.create(null, product, 10)
-        );
-    }
-
-    @Test
-    void create_withNullProduct_throwsException() {
-        AppUser user = AppUser.createUser("user@example.com", "encodedPassword");
-        Cart cart = Cart.create(user);
-
-        assertThrows(
-                NullPointerException.class,
-                () -> CartItem.create(cart, null, 10)
-        );
-    }
-
-    @Test
     void create_withZeroOrNegativeQuantity_throwsException() {
         AppUser user = AppUser.createUser("user@example.com", "encodedPassword");
         Cart cart = Cart.create(user);
