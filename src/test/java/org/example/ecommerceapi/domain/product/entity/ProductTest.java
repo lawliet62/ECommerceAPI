@@ -12,7 +12,7 @@ class ProductTest {
 
     @Test
     void create_withValidValues_createsActiveProduct() {
-        Product product = Product.create("Keyboard", BigDecimal.valueOf(30000), 10);
+        Product product = createProduct();
 
         assertEquals("Keyboard", product.getName());
         assertEquals(BigDecimal.valueOf(30000), product.getPrice());
@@ -70,7 +70,7 @@ class ProductTest {
 
     @Test
     void updateInfo_withValidValues_updatesNameAndPrice() {
-        Product product = Product.create("Keyboard", BigDecimal.valueOf(30000), 10);
+        Product product = createProduct();
         product.updateInfo("Razer keyboard", BigDecimal.valueOf(100000));
 
         assertEquals("Razer keyboard", product.getName());
@@ -79,7 +79,7 @@ class ProductTest {
 
     @Test
     void updateInfo_withBlankName_throwsException() {
-        Product product = Product.create("Keyboard", BigDecimal.valueOf(30000), 10);
+        Product product = createProduct();
 
         assertThrows(
                 IllegalArgumentException.class,
@@ -90,7 +90,7 @@ class ProductTest {
     @ParameterizedTest
     @ValueSource(strings = {"0", "-1"})
     void updateInfo_withNonPositivePrice_throwsException(String price) {
-        Product product = Product.create("Keyboard", BigDecimal.valueOf(30000), 10);
+        Product product = createProduct();
 
         assertThrows(
                 IllegalArgumentException.class,
@@ -100,7 +100,7 @@ class ProductTest {
 
     @Test
     void updateStock_withValidStock_updatesStock() {
-        Product product = Product.create("Keyboard", BigDecimal.valueOf(30000), 10);
+        Product product = createProduct();
         product.updateStock(5);
 
         assertEquals(5, product.getStock());
@@ -108,7 +108,7 @@ class ProductTest {
 
     @Test
     void updateStock_withNegativeStock_throwsException() {
-        Product product = Product.create("Keyboard", BigDecimal.valueOf(30000), 10);
+        Product product = createProduct();
 
         assertThrows(
                 IllegalArgumentException.class,
@@ -118,7 +118,7 @@ class ProductTest {
 
     @Test
     void decreaseStock_withEnoughStock_decreasesStock() {
-        Product product = Product.create("Keyboard", BigDecimal.valueOf(30000), 10);
+        Product product = createProduct();
         product.decreaseStock(5);
 
         assertEquals(5, product.getStock());
@@ -126,7 +126,7 @@ class ProductTest {
 
     @Test
     void decreaseStock_withInsufficientStock_throwsException() {
-        Product product = Product.create("Keyboard", BigDecimal.valueOf(30000), 10);
+        Product product = createProduct();
         assertThrows(
                 IllegalStateException.class,
                 () -> product.decreaseStock(15)
@@ -135,7 +135,7 @@ class ProductTest {
 
     @Test
     void decreaseStock_withZeroOrNegativeQuantity_throwsException() {
-        Product product = Product.create("Keyboard", BigDecimal.valueOf(30000), 10);
+        Product product = createProduct();
         assertThrows(
                 IllegalArgumentException.class,
                 () -> product.decreaseStock(0)
@@ -148,7 +148,7 @@ class ProductTest {
 
     @Test
     void activate_setsActiveTrue() {
-        Product product = Product.create("Keyboard", BigDecimal.valueOf(30000), 10);
+        Product product = createProduct();
         product.activate();
 
         assertTrue(product.isActive());
@@ -156,9 +156,13 @@ class ProductTest {
 
     @Test
     void deactivate_setsActiveFalse() {
-        Product product = Product.create("Keyboard", BigDecimal.valueOf(30000), 10);
+        Product product = createProduct();
         product.deactivate();
 
         assertFalse(product.isActive());
+    }
+
+    private Product createProduct() {
+        return Product.create("Keyboard", BigDecimal.valueOf(30000), 10);
     }
 }
