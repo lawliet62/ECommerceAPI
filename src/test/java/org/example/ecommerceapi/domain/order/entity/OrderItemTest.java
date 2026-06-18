@@ -13,9 +13,8 @@ class OrderItemTest {
 
     @Test
     void create_withValidValues_createsOrderItemWithProductSnapshot() {
-        AppUser user = AppUser.createUser("user@example.com", "encodedPassword");
-        Order order = Order.create(user, BigDecimal.valueOf(20));
-        Product product = Product.create("Product 1", BigDecimal.valueOf(10), 10);
+        Order order = createOrder();
+        Product product = createProduct();
 
         OrderItem orderItem = OrderItem.create(order, product, 2);
 
@@ -28,9 +27,8 @@ class OrderItemTest {
 
     @Test
     void create_copiesProductSnapshotAtCreationTime() {
-        AppUser user = AppUser.createUser("user@example.com", "encodedPassword");
-        Order order = Order.create(user, BigDecimal.valueOf(20));
-        Product product = Product.create("Product 1", BigDecimal.valueOf(10), 10);
+        Order order = createOrder();
+        Product product = createProduct();
 
         OrderItem orderItem = OrderItem.create(order, product, 2);
 
@@ -42,9 +40,8 @@ class OrderItemTest {
 
     @Test
     void create_withInvalidQuantity_throwsException() {
-        AppUser user = AppUser.createUser("user@example.com", "encodedPassword");
-        Order order = Order.create(user, BigDecimal.valueOf(20));
-        Product product = Product.create("Product 1", BigDecimal.valueOf(10), 10);
+        Order order = createOrder();
+        Product product = createProduct();
 
         assertThrows(IllegalArgumentException.class,
                 () -> OrderItem.create(order, product, 0));
@@ -55,12 +52,21 @@ class OrderItemTest {
 
     @Test
     void getSubtotal_returnsPriceSnapshotMultipliedByQuantity() {
-        AppUser user = AppUser.createUser("user@example.com", "encodedPassword");
-        Order order = Order.create(user, BigDecimal.valueOf(20));
-        Product product = Product.create("Product 1", BigDecimal.valueOf(10), 10);
-
-        OrderItem orderItem = OrderItem.create(order, product, 2);
+        OrderItem orderItem = createOrderItem(2);
 
         assertEquals(BigDecimal.valueOf(20), orderItem.getSubtotal());
+    }
+
+    private Order createOrder() {
+        AppUser user = AppUser.createUser("user@example.com", "encodedPassword");
+        return Order.create(user, BigDecimal.valueOf(20));
+    }
+
+    private Product createProduct() {
+        return Product.create("Product 1", BigDecimal.valueOf(10), 10);
+    }
+
+    private OrderItem createOrderItem(int quantity) {
+        return OrderItem.create(createOrder(), createProduct(), quantity);
     }
 }
