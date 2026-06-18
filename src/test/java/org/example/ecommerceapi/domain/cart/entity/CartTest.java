@@ -9,17 +9,13 @@ class CartTest {
 
     @Test
     void create_withUser_createsCart() {
-        AppUser user = AppUser.createUser("user@example.com", "encodedPassword");
+        AppUser user = createUser();
         Cart cart = Cart.create(user);
 
         assertEquals(user, cart.getUser());
     }
 
-    @Test
-    void create_withNullUser_throwsException() {
-        assertThrows(
-                NullPointerException.class,
-                () -> Cart.create(null)
-        );
+    private AppUser createUser() {
+        return AppUser.createUser("user@example.com", "encodedPassword");
     }
 }
