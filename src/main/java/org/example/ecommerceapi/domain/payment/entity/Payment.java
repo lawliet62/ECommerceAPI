@@ -31,7 +31,7 @@ public class Payment {
     private BigDecimal amount;
 
     public static Payment create(Order order) {
-        return new Payment(order, order.getTotalAmount());
+        return new Payment(order);
     }
 
     public void complete() {
@@ -58,7 +58,8 @@ public class Payment {
         this.status = PaymentStatus.FAILED;
     }
 
-    private Payment(@NonNull Order order, BigDecimal amount) {
+    private Payment(@NonNull Order order) {
+        BigDecimal amount = order.getTotalAmount();
         validateAmount(amount);
 
         this.order = order;
