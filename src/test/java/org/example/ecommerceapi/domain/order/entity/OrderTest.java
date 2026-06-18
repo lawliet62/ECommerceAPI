@@ -11,17 +11,17 @@ class OrderTest {
 
     @Test
     void create_withValidValues_createsPendingPaymentOrder() {
-        AppUser user = AppUser.createUser("user@example.com", "encodedPassword");
-        Order order = Order.create(user, BigDecimal.valueOf(100.0));
+        AppUser user = createUser();
+        Order order = Order.create(user, BigDecimal.valueOf(100));
 
         assertEquals(OrderStatus.PENDING_PAYMENT, order.getStatus());
         assertEquals(user, order.getUser());
-        assertEquals(BigDecimal.valueOf(100.0), order.getTotalAmount());
+        assertEquals(BigDecimal.valueOf(100), order.getTotalAmount());
     }
 
     @Test
     void create_withNullTotalAmount_throwsException() {
-        AppUser user = AppUser.createUser("user@example.com", "encodedPassword");
+        AppUser user = createUser();
 
         assertThrows(
                 IllegalArgumentException.class,
@@ -31,23 +31,22 @@ class OrderTest {
 
     @Test
     void create_withZeroOrNegativeTotalAmount_throwsException() {
-        AppUser user = AppUser.createUser("user@example.com", "encodedPassword");
+        AppUser user = createUser();
 
         assertThrows(
                 IllegalArgumentException.class,
-                () -> Order.create(user, BigDecimal.valueOf(0.0))
+                () -> Order.create(user, BigDecimal.ZERO)
         );
 
         assertThrows(
                 IllegalArgumentException.class,
-                () -> Order.create(user, BigDecimal.valueOf(-100.0))
+                () -> Order.create(user, BigDecimal.valueOf(-100))
         );
     }
 
     @Test
     void markAsPaid_whenPendingPayment_changesStatusToPaid() {
-        AppUser user = AppUser.createUser("user@example.com", "encodedPassword");
-        Order order = Order.create(user, BigDecimal.valueOf(100.0));
+        Order order = createPendingPaymentOrder();
         order.markAsPaid();
 
         assertEquals(OrderStatus.PAID, order.getStatus());
@@ -55,20 +54,20 @@ class OrderTest {
 
     @Test
     void markAsPaid_whenNotPendingPayment_throwsException() {
-        AppUser user = AppUser.createUser("user@example.com", "encodedPassword");
-        Order order = Order.create(user, BigDecimal.valueOf(100.0));
-        order.markAsPaid();
+        assertThrows(
+                IllegalStateException.class,
+                createPaidOrder()::markAsPaid
+        );
 
         assertThrows(
                 IllegalStateException.class,
-                order::markAsPaid
+                createCancelledOrder()::markAsPaid
         );
     }
 
     @Test
     void cancel_whenPendingPayment_changesStatusToCancelled() {
-        AppUser user = AppUser.createUser("user@example.com", "encodedPassword");
-        Order order = Order.create(user, BigDecimal.valueOf(100.0));
+        Order order = createPendingPaymentOrder();
         order.cancel();
 
         assertEquals(OrderStatus.CANCELLED, order.getStatus());
@@ -76,14 +75,34 @@ class OrderTest {
 
     @Test
     void cancel_whenNotPendingPayment_throwsException() {
-        AppUser user = AppUser.createUser("user@example.com", "encodedPassword");
-        Order order = Order.create(user, BigDecimal.valueOf(100.0));
-        order.markAsPaid();
+        assertThrows(
+                IllegalStateException.class,
+                createPaidOrder()::cancel
+        );
 
         assertThrows(
                 IllegalStateException.class,
-                order::cancel
+                createCancelledOrder()::cancel
         );
+    }
 
+    private AppUser createUser() {
+        return AppUser.createUser("user@example.com", "encodedPassword");
+    }
+
+    private Order createPendingPaymentOrder() {
+        return Order.create(createUser(), BigDecimal.valueOf(100));
+    }
+
+    private Order createPaidOrder() {
+        Order order = createPendingPaymentOrder();
+        order.markAsPaid();
+        return order;
+    }
+
+    private Order createCancelledOrder() {
+        Order order = createPendingPaymentOrder();
+        order.cancel();
+        return order;
     }
 }
