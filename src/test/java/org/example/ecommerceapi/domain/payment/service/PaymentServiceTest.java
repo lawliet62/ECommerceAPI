@@ -198,7 +198,7 @@ class PaymentServiceTest {
     @Test
     void completePayment_whenPending_decreasesStockAndMarksPaymentSuccessAndOrderPaid() {
         AppUser user = createUser();
-        Product product = createProduct("Keyboard");
+        Product product = createProduct();
         Order order = Order.create(user, BigDecimal.valueOf(10000));
         Payment payment = Payment.create(order);
         OrderItem orderItem =
@@ -258,7 +258,7 @@ class PaymentServiceTest {
     @Test
     void completePayment_whenStockInsufficient_throwsInsufficientStock() {
         AppUser user = createUser();
-        Product product = createProduct("Keyboard");
+        Product product = createProduct();
         Order order = Order.create(user, BigDecimal.valueOf(10000));
         Payment payment = Payment.create(order);
         OrderItem orderItem =
@@ -350,8 +350,8 @@ class PaymentServiceTest {
         return AppUser.createUser("user@example.com", "encodedPassword");
     }
 
-    private Product createProduct(String name) {
-        return Product.create(name, BigDecimal.valueOf(10000), 10);
+    private Product createProduct() {
+        return Product.create("Keyboard", BigDecimal.valueOf(10000), 10);
     }
 
     private Pageable createPageable() {
