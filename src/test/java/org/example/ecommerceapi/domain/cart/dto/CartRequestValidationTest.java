@@ -39,7 +39,6 @@ class CartRequestValidationTest {
     void addItemRequest_withInvalidProductId_failsValidation() {
         var request = new AddItemRequest(0L, 1);
         var violations = validate(request);
-        assertFalse(violations.isEmpty());
         assertTrue(hasViolationForProperty(violations, "productId"));
     }
 
@@ -47,7 +46,6 @@ class CartRequestValidationTest {
     void addItemRequest_withInvalidQuantity_failsValidation() {
         var request = new AddItemRequest(1L, 0);
         var violations = validate(request);
-        assertFalse(violations.isEmpty());
         assertTrue(hasViolationForProperty(violations, "quantity"));
     }
 
@@ -62,7 +60,6 @@ class CartRequestValidationTest {
     void updateItemRequest_withInvalidQuantity_failsValidation() {
         var request = new UpdateItemRequest(0);
         var violations = validate(request);
-        assertFalse(violations.isEmpty());
         assertTrue(hasViolationForProperty(violations, "quantity"));
     }
 

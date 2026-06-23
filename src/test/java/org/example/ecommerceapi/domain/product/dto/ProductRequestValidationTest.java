@@ -46,7 +46,6 @@ class ProductRequestValidationTest {
 
         Set<ConstraintViolation<ProductCreateRequest>> violations = validate(request);
 
-        assertFalse(violations.isEmpty());
         assertTrue(hasViolationForProperty(violations, "name"));
     }
 
@@ -57,7 +56,6 @@ class ProductRequestValidationTest {
 
         Set<ConstraintViolation<ProductCreateRequest>> violations = validate(request);
 
-        assertFalse(violations.isEmpty());
         assertTrue(hasViolationForProperty(violations, "name"));
     }
 
@@ -68,7 +66,6 @@ class ProductRequestValidationTest {
 
         Set<ConstraintViolation<ProductCreateRequest>> violations = validate(request);
 
-        assertFalse(violations.isEmpty());
         assertTrue(hasViolationForProperty(violations, "price"));
     }
 
@@ -79,7 +76,6 @@ class ProductRequestValidationTest {
 
         Set<ConstraintViolation<ProductCreateRequest>> violations = validate(request);
 
-        assertFalse(violations.isEmpty());
         assertTrue(hasViolationForProperty(violations, "stock"));
     }
 
@@ -100,7 +96,6 @@ class ProductRequestValidationTest {
 
         Set<ConstraintViolation<ProductUpdateRequest>> violations = validate(request);
 
-        assertFalse(violations.isEmpty());
         assertTrue(hasViolationForProperty(violations, "name"));
     }
 
@@ -111,7 +106,6 @@ class ProductRequestValidationTest {
 
         Set<ConstraintViolation<ProductUpdateRequest>> violations = validate(request);
 
-        assertFalse(violations.isEmpty());
         assertTrue(hasViolationForProperty(violations, "price"));
     }
 
@@ -122,7 +116,6 @@ class ProductRequestValidationTest {
 
         Set<ConstraintViolation<InventoryUpdateRequest>> violations = validate(request);
 
-        assertFalse(violations.isEmpty());
         assertTrue(hasViolationForProperty(violations, "stock"));
     }
 
